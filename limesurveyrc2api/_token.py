@@ -277,6 +277,45 @@ class _Token(object):
             assert response_type is list
         return response
 
-    def remind_participants(self):
-        # TODO
-        raise NotImplementedError
+    def remind_participants(
+            self, survey_id, minDaysBetween=0, maxReminders=1000, tokenIds=[]):
+        """
+        Send reminders to participant who did not participate yet.
+
+        Parameters
+        :param survey_id: ID of survey to invite participants from.
+        :type survey_id: Integer
+        :param minDaysBetween: days from last reminder
+        :type start: Integer
+        :param maxReminder: Maximum reminders count
+        :type maxReminders: Integer
+        :param token_ids: List of token IDs for participants to invite.
+        :type token_ids: List[Integer]
+        """
+        method = "remind_participants"
+        params = OrderedDict([
+            ("sSessionKey", self.api.session_key),
+            ("iSurveyID", survey_id),
+            ("iMinDaysBetween", minDaysBetween),
+            ("iMaxReminders", maxReminders),
+            ("aTokenIds", []),
+        ])
+        response = self.api.query(method=method, params=params)
+        response_type = type(response)
+
+        if response_type is dict and "status" in response:
+            status = response["status"]
+            error_messages = [
+                "Error: Invalid survey ID",
+                "Error: No token table",
+                "No survey participants found.",
+                "Invalid session key",
+                "No permission",
+                "Invalid Session Key"
+            ]
+            for message in error_messages:
+                if status == message:
+                    raise LimeSurveyError(method, status)
+        else:
+            assert response_type is list
+        return response
