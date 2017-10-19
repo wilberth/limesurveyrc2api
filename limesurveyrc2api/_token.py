@@ -278,16 +278,16 @@ class _Token(object):
         return response
 
     def remind_participants(
-            self, survey_id, minDaysBetween=0, maxReminders=1000, tokenIds=[]):
+            self, survey_id, min_days_between=0, max_reminders=1000, tokenIds=[]):
         """
         Send reminders to participant who did not participate yet.
 
         Parameters
         :param survey_id: ID of survey to invite participants from.
         :type survey_id: Integer
-        :param minDaysBetween: days from last reminder
+        :param min_days_between: days from last reminder
         :type start: Integer
-        :param maxReminder: Maximum reminders count
+        :param max_reminder: Maximum reminders count
         :type maxReminders: Integer
         :param token_ids: List of token IDs for participants to invite.
         :type token_ids: List[Integer]
@@ -296,8 +296,8 @@ class _Token(object):
         params = OrderedDict([
             ("sSessionKey", self.api.session_key),
             ("iSurveyID", survey_id),
-            ("iMinDaysBetween", minDaysBetween),
-            ("iMaxReminders", maxReminders),
+            ("iMinDaysBetween", min_days_between),
+            ("iMaxReminders", max_reminders),
             ("aTokenIds", []),
         ])
         response = self.api.query(method=method, params=params)
